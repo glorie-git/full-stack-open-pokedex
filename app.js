@@ -11,7 +11,9 @@ app.get('/version', (req, res) => {
 })
 
 app.get('/health', (req, res) => {
-  res.status(200).send('ok')
+  // eslint-disable-next-line no-constant-condition
+  if (true) throw('error...  ')
+  res.send('ok')
 })
 
 // middleware to catch any un configured endpoints
