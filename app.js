@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 
 // Heroku dynamically sets a port
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 3300
 
 app.use(express.static('dist'))
 
@@ -11,10 +11,17 @@ app.get('/version', (req, res) => {
 })
 
 app.get('/health', (req, res) => {
-  res.send('ok')
+  res.status(200).send('ok')
 })
+
+// middleware to catch any un configured endpoints
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log('server started on port 5000')
+  console.log('server started on port', PORT)
 })
