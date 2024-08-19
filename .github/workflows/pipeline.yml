@@ -1,14 +1,18 @@
 name: Deployment pipeline
 
+env:
+  SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
+  
 on:
   push:
-    branches: [ "master" ]
+    branches: [ master, main ]
   pull_request:
-    branches: [main]
+    branches: [main, master]
     types: [opened, synchronize]
 
 jobs:
   deployment_pipeline:
+    if: ${{ !env.SKIP }}
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
@@ -24,7 +28,7 @@ jobs:
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
   
   tag_release:
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && !env.SKIP }}
     needs: [deployment_pipeline]
     permissions:
       contents: write
