@@ -1,4 +1,7 @@
 name: Deployment pipeline
+
+env:
+  SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
   
 on:
   push:
@@ -6,9 +9,6 @@ on:
   pull_request:
     branches: [main, master]
     types: [opened, synchronize]
-
-env:
-  SKIP: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
   
 jobs:
   deployment_pipeline:
