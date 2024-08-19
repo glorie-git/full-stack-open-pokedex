@@ -22,11 +22,20 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+  
   tag_release:
     if: ${{ github.event_name == 'push' }}
     needs: [deployment_pipeline]
+    permissions:
+      contents: write
     runs-on: ubuntu-20.04
+    
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: '0'
+          
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.70.0
         env:
