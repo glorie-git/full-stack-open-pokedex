@@ -8,7 +8,7 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  simple_deployment_pipeline:
+  deployment_pipeline:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
@@ -22,3 +22,14 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+  tag_release:
+    if: ${{ github.event_name == 'push' }}
+    needs: [deployment_pipeline]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.70.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          WITH_V: true
+          DEFUALT_BUMP: patch
