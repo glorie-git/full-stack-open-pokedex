@@ -2,8 +2,7 @@ name: Testing stuff
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   a_test_job:
