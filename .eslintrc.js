@@ -2,9 +2,11 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
+    commonjs: true,
+    node: true,
     "jest/globals": true,
   },
-  extends: ["eslint:recommended", "plugin:react/recommended"],
+  extends: ["eslint:recommended", "plugin:react/recommended", "plugin:react/jsx-runtime"],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
