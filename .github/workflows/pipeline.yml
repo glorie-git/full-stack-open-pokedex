@@ -1,7 +1,7 @@
 name: Deployment pipeline
 
 env:
-  SKIP_DEPLOY_TAGING: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
+  SKIP_DEPLOY_AND_TAGING: ${{ contains(join(github.event.commits.*.message, ' '), '#skip') }}
   
 on:
   push:
@@ -12,7 +12,7 @@ on:
   
 jobs:
   deployment_pipeline:
-    if: ${{ !github.env.SKIP_DEPLOY_TAGING }}
+    if: ${{ !github.env.SKIP_DEPLOY_AND_TAGING }}
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
@@ -28,7 +28,7 @@ jobs:
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
   
   tag_release:
-    if: ${{ github.event_name == 'push' && !github.env.SKIP_DEPLOY_TAGING }}
+    if: ${{ github.event_name == 'push' && !github.env.SKIP_DEPLOY_AND_TAGING }}
     needs: [deployment_pipeline]
     permissions:
       contents: write
