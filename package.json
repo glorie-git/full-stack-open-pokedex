@@ -7,8 +7,17 @@
     "start": "webpack-dev-server --open --mode development",
     "start-prod": "node app.js",
     "test": "jest",
+    "test:e2e": "playwright test",
+    "test:report": "playwright show-report",
     "eslint": "eslint './**/*.{js,jsx}'",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "start:test": "NODE_ENV=test node index.js"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "testPathIgnorePatterns": [
+      "e2e-tests"
+    ]
   },
   "repository": {
     "type": "git",
@@ -28,8 +37,10 @@
     "@babel/plugin-transform-runtime": "^7.10.0",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
+    "@playwright/test": "^1.46.1",
     "@testing-library/jest-dom": "^5.8.0",
     "@testing-library/react": "^10.0.4",
+    "@types/node": "^22.4.1",
     "babel-jest": "^29.7.0",
     "babel-loader": "^8.1.0",
     "css-loader": "^7.1.2",
